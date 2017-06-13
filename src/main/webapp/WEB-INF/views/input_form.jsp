@@ -12,7 +12,7 @@
 <body>
 <c:url var="addAction" value="/register"/>
 <form:form action="${addAction}" commandName="employee" method="post" cssClass="form-horizontal" onsubmit="return checkVal(this);">
-    <form:hidden path="id" cssClass="form-control"/>
+    <form:hidden path="id" id="id" cssClass="form-control"/>
     <br><br>
     <div class="form-group">
         <label for="userName" class="col-sm-2 control-label">User Name: </label>

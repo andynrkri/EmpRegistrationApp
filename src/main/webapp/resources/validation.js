@@ -18,8 +18,10 @@ $(document).ready(function () {
 
     $("#userName").blur(function () {
         var userMessage = $('#userNameMessage');
+        var id = $('#id').val();
         var resp = checkUsername();
-        if(resp==="Yes") {
+        //here I'm taking care of that this message is not shown if the user is editing an object.
+        if(resp==="Yes" && !id===0) {
             userMessage.css("color", "red");
             userMessage.html("Sorry, the username is not available.");
         }
@@ -68,6 +70,8 @@ function clearErrors() {
 
 //this will be called on submit only, unlike the above.
 function checkVal() {
+    this.id= $('#id').val();
+
     this.userName = $('#userName').val();
     this.usernameMesssage = $('#userNameMessage');
 
@@ -88,8 +92,8 @@ function checkVal() {
         this.usernameMesssage.html("Sorry, the username can't be empty.");
         return false;
     }
-    // if username is available
-    else if(checkUsername()==="Yes"){
+    // if username is available and we're not editing the object.
+    else if(this.id===0 && checkUsername()==="Yes"){
         this.usernameMesssage.css("color", "red");
         this.usernameMesssage.html("Sorry, the username is not available.");
         return false;
