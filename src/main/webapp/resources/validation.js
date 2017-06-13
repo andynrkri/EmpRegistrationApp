@@ -1,7 +1,43 @@
-$(document).ready(function () {
-    //remember to study about async!!!!!!!
-    window.checkUsername = function checkUser() {
-        var name = $('#userName').val();
+function Registration(){
+
+    var _username =null;
+    var _password = null;
+
+    initializeFields = function () {
+        _username =  $('#userName');
+        _password = $('#password');
+    };
+
+    this.init = function () {
+        initializeFields();
+        _username.blur(function () {
+            var name = _username.val();
+            var userMessage = $('#userNameMessage');
+            var id = $('#id').val();
+
+            //checking for spaces.
+            if(name.indexOf(" ")>=0){
+                userMessage.css("color", "red");
+                userMessage.html("Sorry, the username can't contain spaces.");
+                return;
+            }
+
+            var resp = registration.checkUsername();
+            //making sure with id that these messages are not shown at the time of editing. ie. id is not 0.
+            if (resp === "Yes" && id==0) {
+                userMessage.css("color", "red");
+                userMessage.html("Sorry, the username is not available.");
+            }
+            else if (resp === "No" && id==0) {
+                userMessage.css("color", "green");
+                userMessage.html("Congrats, Your username is available.");
+            }
+        });
+    };
+
+    this.checkUsername = function () {
+        initializeFields();
+        var name = _username.val();
         var result = null;
         var scriptUrl = "/rest/queryusername?userName=" + name;
         $.ajax({
@@ -9,46 +45,30 @@ $(document).ready(function () {
             type: 'get',
             dataType: 'text',
             async: false,
-            success: function(data) {
+            success: function (data) {
                 result = data;
             }
         });
         return result;
     };
 
-    $("#userName").blur(function () {
-        var userMessage = $('#userNameMessage');
-        var id = $('#id').val();
-        var resp = checkUsername();
-        //here I'm taking care of that this message is not shown if the user is editing an object.
-        if(resp==="Yes" && !id===0) {
-            userMessage.css("color", "red");
-            userMessage.html("Sorry, the username is not available.");
-        }
-        else if(resp==="No"){
-            userMessage.css("color", "green");
-            userMessage.html("Congrats, Your username is available.");
-        }
-    });
-
-    $('#password').keyup(function () {
-        $('#passwordMessage').html(checkStrength($('#password').val()))
-    });
-    function checkStrength(password) {
+    this.checkStrength = function () {
+        initializeFields();
+        var password = _password.val();
         var strength = 0;
         var passwordMessage = $('#passwordMessage');
+        if (password.length==0){
+            passwordMessage.css("color", "red");
+            return "can't be empty";
+        }
         if (password.length < 6) {
             passwordMessage.css("color", "red");
             return 'Too short'
         }
         if (password.length > 7) strength += 1;
-
         if (password.match(/([a-z].*[A-Z])|([A-Z].*[a-z])/)) strength += 1;
-
         if (password.match(/([a-zA-Z])/) && password.match(/([0-9])/)) strength += 1;
-
         if (password.match(/([!,%,&,@,#,$,^,*,?,_,~])/)) strength += 1;
-
         if (strength < 2) {
             passwordMessage.css("color", "red");
             return 'Weak'
@@ -61,7 +81,16 @@ $(document).ready(function () {
             passwordMessage.css("color", "green");
             return 'Strong'
         }
-    }
+    };
+}
+
+var registration = new Registration();
+
+$(document).ready(function () {
+    registration.init();
+    $('#password').keyup(function () {
+        $('#passwordMessage').html(this.checkStrength())
+    });
 });
 
 function clearErrors() {
@@ -87,22 +116,34 @@ function checkVal() {
     this.city = jQuery("#city").find("option:selected").text();
     this.cityMessage = $('#cityMessage');
     //if username is empty
-    if (!this.userName){
+    if (!this.userName) {
         this.usernameMesssage.css("color", "red");
         this.usernameMesssage.html("Sorry, the username can't be empty.");
         return false;
     }
+    // if username contains spaces
+    else if(this.userName.indexOf(" ")>=0){
+        this.usernameMesssage.css("color", "red");
+        this.usernameMesssage.html("Sorry, the username can't contain spaces");
+        return false;
+    }
+
     // if username is available and we're not editing the object.
-    else if(this.id===0 && checkUsername()==="Yes"){
+    else if (this.id == 0 && registration.checkUsername() === "Yes") {
         this.usernameMesssage.css("color", "red");
         this.usernameMesssage.html("Sorry, the username is not available.");
         return false;
     }
-
     // if password is empty
-    else if(!this.password) {
+    else if (!this.password) {
         this.passwordMessage.css("color", "red");
         this.passwordMessage.html("Sorry, the password can't be empty");
+        return false;
+    }
+    //if password contains spaces
+    else if (this.password.indexOf(" ")>=0) {
+        this.passwordMessage.css("color", "red");
+        this.passwordMessage.html("Sorry, the password can't contain spaces.");
         return false;
     }
     //if name is empty
@@ -117,13 +158,6 @@ function checkVal() {
         clearErrors();
         this.nameMessage.css("color", "red");
         this.nameMessage.html("Name can't have any digit.");
-        return false;
-    }
-    //if name is longer than 20 words
-    else if (this.name.replace(/ +/g, "").length > 20) {
-        clearErrors();
-        this.nameMessage.css("color", "red");
-        this.nameMessage.html("Name can't be longer than 15 characters.");
         return false;
     }
     //if gender radio button is unselected
