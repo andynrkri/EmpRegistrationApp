@@ -1,11 +1,28 @@
-function Registration(){
-
-    var _username =null;
+function Registration() {
+    var _id = null;
+    var _username = null;
     var _password = null;
+    var _name = null;
+    var _salary = null;
+    var _city = null;
+    var _usernameMessage = null;
+    var _passwordMessage = null;
+    var _nameMessage = null;
+    var _salaryMessage = null;
+    var _cityMessage = null;
 
     initializeFields = function () {
-        _username =  $('#userName');
+        _id = $('#id');
+        _username = $('#userName');
         _password = $('#password');
+        _name = $('#name');
+        _salary = $('#salary');
+        _city = jQuery("#city").find("option:selected");
+        _usernameMessage = $('#userNameMessage');
+        _passwordMessage = $('#passwordMessage');
+        _nameMessage = $('#nameMessage');
+        _salaryMessage = $('#salaryMessage');
+        _cityMessage = $('#cityMessage');
     };
 
     this.init = function () {
@@ -16,7 +33,7 @@ function Registration(){
             var id = $('#id').val();
 
             //checking for spaces.
-            if(name.indexOf(" ")>=0){
+            if (name.indexOf(" ") >= 0) {
                 userMessage.css("color", "red");
                 userMessage.html("Sorry, the username can't contain spaces.");
                 return;
@@ -24,11 +41,11 @@ function Registration(){
 
             var resp = registration.checkUsername();
             //making sure with id that these messages are not shown at the time of editing. ie. id is not 0.
-            if (resp === "Yes" && id==0) {
+            if (resp === "Yes" && id == 0) {
                 userMessage.css("color", "red");
                 userMessage.html("Sorry, the username is not available.");
             }
-            else if (resp === "No" && id==0) {
+            else if (resp === "No" && id == 0) {
                 userMessage.css("color", "green");
                 userMessage.html("Congrats, Your username is available.");
             }
@@ -36,7 +53,6 @@ function Registration(){
     };
 
     this.checkUsername = function () {
-        initializeFields();
         var name = _username.val();
         var result = null;
         var scriptUrl = "/rest/queryusername?userName=" + name;
@@ -57,7 +73,7 @@ function Registration(){
         var password = _password.val();
         var strength = 0;
         var passwordMessage = $('#passwordMessage');
-        if (password.length==0){
+        if (password.length == 0) {
             passwordMessage.css("color", "red");
             return "can't be empty";
         }
@@ -82,6 +98,100 @@ function Registration(){
             return 'Strong'
         }
     };
+
+    this.checkSpaces = function (string) {
+        return string.indexOf(" ") >= 0;
+    };
+
+    this.clearError = function () {
+        $('.errmsg').html("");
+    };
+
+    this.checkVal = function () {
+        initializeFields();
+        var status = true;
+        //if username is empty
+        if (!_username.val()) {
+            _usernameMessage.css("color", "red");
+            _usernameMessage.html("Sorry, the username can't be empty.");
+            status = false;
+        }
+        // if username contains spaces
+        else if (registration.checkSpaces(_username.val())) {
+            _usernameMessage.css("color", "red");
+            _usernameMessage.html("Sorry, the username can't contain spaces");
+            status = false;
+        }
+
+        // if username is available and we're not editing the object.
+        else if (_id.val() == 0 && registration.checkUsername() === "Yes") {
+            _usernameMessage.css("color", "red");
+            _usernameMessage.html("Sorry, the username is not available.");
+            status = false;
+        }
+        // if password is empty
+        else if (!_password.val()) {
+            _passwordMessage.css("color", "red");
+            _passwordMessage.html("Sorry, the password can't be empty");
+            status = false;
+        }
+        //if password contains spaces
+        else if (registration.checkSpaces(_password.val())) {
+            _passwordMessage.css("color", "red");
+            _passwordMessage.html("Sorry, the password can't contain spaces.");
+            status = false;
+        }
+        else if (!_name.val()) {
+            registration.clearError();
+            _nameMessage.css("color", "red");
+            _nameMessage.html("name can't be empty");
+            status = false;
+        }
+        //if name has digits
+        else if (/\d/.test(_name.val())) {
+            registration.clearError();
+            _nameMessage.css("color", "red");
+            _nameMessage.html("Name can't have any digit.");
+            status = false;
+        }
+        //if gender radio button is unselected
+        else if (!$('input[name=gender]:checked').length > 0) {
+            registration.clearError();
+            var genderMessage = $('#genderMessage');
+            genderMessage.css("color", "red");
+            genderMessage.html("Please select the gender");
+            status = false;
+        }
+        //if salary is unfilled.
+        else if (!_salary.val()) {
+            registration.clearError();
+            _salaryMessage.css("color", "red");
+            _salaryMessage.html("Please enter salary");
+            status = false;
+        }
+        //if salary isn't numeric
+        else if (_salary.val().match(/[^$,.\d]/)) {
+            registration.clearError();
+            _salaryMessage.css("color", "red");
+            _salaryMessage.html("salary can only contains numbers.");
+            status = false;
+        }
+        //if it's less than 5000
+        else if (_salary.val() < 5000) {
+            registration.clearError();
+            _salaryMessage.css("color", "red");
+            _salaryMessage.html("Salary can't be less than 5000.");
+            status = false;
+        }
+        //if city is unfilled.
+        else if (_city.text() === "Select your city") {
+            registration.clearError();
+            _cityMessage.css("color", "red");
+            _cityMessage.html("Please select the city");
+            status = false;
+        }
+        return status;
+    }
 }
 
 var registration = new Registration();
@@ -89,113 +199,10 @@ var registration = new Registration();
 $(document).ready(function () {
     registration.init();
     $('#password').keyup(function () {
-        $('#passwordMessage').html(this.checkStrength())
+        $('#passwordMessage').html(registration.checkStrength())
     });
 });
 
-function clearErrors() {
-    $('.errmsg').html("");
-}
-
-//this will be called on submit only, unlike the above.
-function checkVal() {
-    this.id= $('#id').val();
-
-    this.userName = $('#userName').val();
-    this.usernameMesssage = $('#userNameMessage');
-
-    this.password = $('#password').val();
-    this.passwordMessage = $('#passwordMessage');
-
-    this.name = $('#name').val();
-    this.nameMessage = $('#nameMessage');
-
-    this.salary = $('#salary').val();
-    this.salaryMessage = $('#salaryMessage');
-
-    this.city = jQuery("#city").find("option:selected").text();
-    this.cityMessage = $('#cityMessage');
-    //if username is empty
-    if (!this.userName) {
-        this.usernameMesssage.css("color", "red");
-        this.usernameMesssage.html("Sorry, the username can't be empty.");
-        return false;
-    }
-    // if username contains spaces
-    else if(this.userName.indexOf(" ")>=0){
-        this.usernameMesssage.css("color", "red");
-        this.usernameMesssage.html("Sorry, the username can't contain spaces");
-        return false;
-    }
-
-    // if username is available and we're not editing the object.
-    else if (this.id == 0 && registration.checkUsername() === "Yes") {
-        this.usernameMesssage.css("color", "red");
-        this.usernameMesssage.html("Sorry, the username is not available.");
-        return false;
-    }
-    // if password is empty
-    else if (!this.password) {
-        this.passwordMessage.css("color", "red");
-        this.passwordMessage.html("Sorry, the password can't be empty");
-        return false;
-    }
-    //if password contains spaces
-    else if (this.password.indexOf(" ")>=0) {
-        this.passwordMessage.css("color", "red");
-        this.passwordMessage.html("Sorry, the password can't contain spaces.");
-        return false;
-    }
-    //if name is empty
-    else if (!this.name) {
-        clearErrors();
-        this.nameMessage.css("color", "red");
-        this.nameMessage.html("name can't be empty");
-        return false;
-    }
-    //if name has digits
-    else if (/\d/.test(this.name)) {
-        clearErrors();
-        this.nameMessage.css("color", "red");
-        this.nameMessage.html("Name can't have any digit.");
-        return false;
-    }
-    //if gender radio button is unselected
-    else if (!$('input[name=gender]:checked').length > 0) {
-        clearErrors();
-        var genderMessage = $('#genderMessage');
-        genderMessage.css("color", "red");
-        genderMessage.html("Please select the gender");
-        return false;
-    }
-    //if salary is unfilled.
-    if (!this.salary) {
-        clearErrors();
-        this.salaryMessage.css("color", "red");
-        this.salaryMessage.html("Please enter salary");
-        return false;
-    }
-    //if salary isn't numeric
-    else if (this.salary.match(/[^$,.\d]/)) {
-        clearErrors();
-        this.salaryMessage.css("color", "red");
-        this.salaryMessage.html("salary can only contains numbers.");
-        return false;
-    }
-    //if it's less than 5000
-    else if (this.salary < 5000) {
-        clearErrors();
-        this.salaryMessage.css("color", "red");
-        this.salaryMessage.html("Salary can't be less than 5000.");
-        return false;
-    }
-    //if city is unfilled.
-    else if (this.city === "Select your city") {
-        clearErrors();
-        this.cityMessage.css("color", "red");
-        this.cityMessage.html("Please select the city");
-        return false;
-    }
-    //when all the conditions pass, return true and hence perform action.
-    return true;
+function returnVal() {
+    return registration.checkVal();
 }

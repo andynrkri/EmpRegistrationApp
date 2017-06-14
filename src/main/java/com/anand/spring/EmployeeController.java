@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -43,7 +44,7 @@ public class EmployeeController {
    }
    
    @RequestMapping(value = "/register", method = RequestMethod.POST)
-   public String registerEmployee(@ModelAttribute("employee") Employee employee) {
+   public String registerEmployee(@ModelAttribute("employee") Employee employee, BindingResult bindingResult) {
       if (employee.getId() == 0) {
          getEmployeeService().addEmployee(employee);
       } else {
