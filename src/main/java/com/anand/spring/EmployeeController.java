@@ -13,21 +13,20 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 @Controller
 public class EmployeeController {
    private EmployeeService employeeService;
-   
-   private Map<String, String> cities = new LinkedHashMap<>();
-   
-   public Map<String, String> getCities() {
-      return cities;
-   }
-   
    private EmployeeService getEmployeeService() {
       return employeeService;
+   }
+   
+   private Map<String, String> cities = new LinkedHashMap<>();
+   public Map<String, String> getCities() {
+      return cities;
    }
    
    @Autowired()
@@ -44,7 +43,10 @@ public class EmployeeController {
    }
    
    @RequestMapping(value = "/register", method = RequestMethod.POST)
-   public String registerEmployee(@ModelAttribute("employee") Employee employee, BindingResult bindingResult) {
+   public String registerEmployee(@ModelAttribute("employee")@Valid Employee employee, BindingResult bindingResult) {
+      if (bindingResult.hasErrors()) {
+         return "redirect:/home";
+      }
       if (employee.getId() == 0) {
          getEmployeeService().addEmployee(employee);
       } else {
