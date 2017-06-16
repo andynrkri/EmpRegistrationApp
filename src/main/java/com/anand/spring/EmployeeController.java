@@ -5,7 +5,6 @@ import com.anand.spring.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -36,14 +35,14 @@ public class EmployeeController {
    }
    
    @RequestMapping(value = {"/", "/home"})
-   public String homePage(Model model) {
-      model.addAttribute("employee", new Employee());
-      model.addAttribute("cityList", getCitiesList());
+   public String homePage(ModelMap modelMap) {
+      modelMap.addAttribute("employee", new Employee());
+      modelMap.addAttribute("cityList", getCitiesList());
       return "input_form";
    }
    
    @RequestMapping(value = "/register", method = RequestMethod.POST)
-   public String registerEmployee(@ModelAttribute("employee")@Valid Employee employee, BindingResult bindingResult) {
+   public String registerEmployee(@Valid @ModelAttribute("employee") Employee employee, BindingResult bindingResult) {
       if (bindingResult.hasErrors()) {
          return "redirect:/home";
       }
@@ -62,9 +61,9 @@ public class EmployeeController {
    }
    
    @RequestMapping(value = "/edit/{id}")
-   public String editEmployee(@PathVariable("id") int id, Model model) {
-      model.addAttribute("employee", getEmployeeService().getEmployeeById(id));
-      model.addAttribute("cityList", getCitiesList());
+   public String editEmployee(@PathVariable("id") int id, ModelMap modelMap) {
+      modelMap.addAttribute("employee", getEmployeeService().getEmployeeById(id));
+      modelMap.addAttribute("cityList", getCitiesList());
       return "input_form";
    }
    

@@ -1,6 +1,9 @@
 package com.anand.spring.model;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 
 @Entity
 public class Employee {
@@ -8,11 +11,17 @@ public class Employee {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    private int id;
    @Column(unique = true)
+   @NotEmpty
    private String userName;
+   @NotEmpty
    private String password;
+   @NotEmpty
    private String name;
+   @NotEmpty
    private String gender;
+   @NotEmpty
    private Integer salary;
+   //salary is being taken from a select tag and hence will never be empty
    private String city;
    
    public String getUserName() {

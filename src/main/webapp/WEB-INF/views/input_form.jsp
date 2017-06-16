@@ -8,12 +8,11 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/jquery.validation/1.15.1/jquery.validate.min.js"></script>
-    <script type="text/javascript" src="<c:url value="/resources/validation.js"/>"></script>
+    <%--<script type="text/javascript" src="<c:url value="/resources/validation.js"/>"></script>--%>
 </head>
 <body>
 <c:url var="addAction" value="/register"/>
-<form:form action="${addAction}" commandName="employee" method="post" cssClass="form-horizontal"
-           onsubmit="return returnVal();">
+<form:form action="${addAction}" commandName="employee" method="post" cssClass="form-horizontal" onsubmit="return returnVal();">
     <form:hidden path="id" id="id"/>
     <br><br>
     <div class="form-group">
