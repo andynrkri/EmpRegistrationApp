@@ -51,6 +51,9 @@ public class EmployeeController {
       } else {
          getEmployeeService().updateEmployee(employee);
       }
+      // forward will send the same POST data to the list. Make sure the /list implementing method doesn't interpret this.
+       // Also, in the case you want to prevent multiple POST request by client, user redirect!! I've used forward coz
+       // I read it's a tad bit faster than the redirect.
       return "forward:/list";
    }
    
@@ -66,7 +69,7 @@ public class EmployeeController {
       modelMap.addAttribute("cityList", getCitiesList());
       return "input_form";
    }
-   
+   // forward will send the same get request to list.
    @RequestMapping(value = "/delete/{id}")
    public String deleteEmployee(@PathVariable("id") int id) {
       try {
