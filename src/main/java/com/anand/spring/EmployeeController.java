@@ -24,7 +24,7 @@ public class EmployeeController {
    }
    
    private Map<String, String> cities = new LinkedHashMap<>();
-   public Map<String, String> getCities() {
+   private Map<String, String> getCities() {
       return cities;
    }
    
@@ -51,7 +51,7 @@ public class EmployeeController {
       } else {
          getEmployeeService().updateEmployee(employee);
       }
-      return "redirect:/list";
+      return "forward:/list";
    }
    
    @RequestMapping(value = "/list")
@@ -71,7 +71,7 @@ public class EmployeeController {
    public String deleteEmployee(@PathVariable("id") int id) {
       try {
          if (getEmployeeService().deleteEmployeeById(id)) {
-            return "redirect:/list";
+            return "forward:/list";
          }
       } catch (Exception e) {
          return "redirect:/home";
@@ -79,7 +79,7 @@ public class EmployeeController {
       return "redirect:/home";
    }
    
-   public Map<String, String> getCitiesList() {
+   private Map<String, String> getCitiesList() {
       Map<String, String> cities = getCities();
       cities.put("Not Selected", "Select your city");
       cities.put("Noida", "Noida");
