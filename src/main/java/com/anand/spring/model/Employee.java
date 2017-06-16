@@ -19,7 +19,7 @@ public class Employee {
    private String name;
    @NotEmpty
    private String gender;
-   @NotEmpty
+   @NotNull
    private Integer salary;
    //salary is being taken from a select tag and hence will never be empty
    private String city;

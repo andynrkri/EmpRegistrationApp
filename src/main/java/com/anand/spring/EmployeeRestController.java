@@ -1,11 +1,15 @@
 package com.anand.spring;
 
+import com.anand.spring.model.Employee;
 import com.anand.spring.service.EmployeeService;
+import com.fasterxml.jackson.annotation.JsonView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/rest")
@@ -33,5 +37,10 @@ public class EmployeeRestController {
       else {
          return "No";
       }
+   }
+
+   @RequestMapping("/getuserlist")
+   public List<Employee> testJsonAnnotation() {
+      return getEmployeeService().listEmployees();
    }
 }
