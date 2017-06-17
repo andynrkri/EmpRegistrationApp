@@ -34,10 +34,8 @@ public class EmployeeController {
    }
    //TODO Study about @InitBinder
    @InitBinder
-   protected void initBinder(HttpServletRequest request,
-                             ServletRequestDataBinder binder) throws ServletException {
-      binder.registerCustomEditor(byte[].class,
-              new ByteArrayMultipartFileEditor());
+   protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws ServletException {
+      binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
    }
    
    @Autowired()
@@ -104,7 +102,12 @@ public class EmployeeController {
       fos.write(bytes);
       fos.flush();
       fos.close();
-      return "This resume is available at " + newFilePath + ".";
+      return "This resume is available at " + newFilePath;
+   }
+
+   @RequestMapping("/error")
+   public String errorPage() {
+      return "error_page";
    }
    
    private Map<String, String> getCitiesList() {
