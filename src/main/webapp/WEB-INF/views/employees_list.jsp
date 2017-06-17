@@ -32,7 +32,7 @@
             text-decoration: none;
             display: inline-block;
             font-size: 15px;
-            margin: 10px 15px 10px 5px;
+            margin-right: 15px;
         }
     </style>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -50,6 +50,7 @@
             <th>Gender</th>
             <th>Salary</th>
             <th>City</th>
+            <th>Resume</th>
             <th>Action</th>
         </tr>
         <c:forEach items="${employeesList}" var="emp">
@@ -61,6 +62,7 @@
                 <td>${emp.gender}</td>
                 <td>${emp.salary}</td>
                 <td>${emp.city}</td>
+                <td><a href="<c:url	value='/resume/${emp.id}'/>" class="button">Retrieve</a></td>
                 <td>
                     <a href="<c:url	value='/edit/${emp.id}'/>" class="button">Edit</a>
                     <a href="<c:url	value='/delete/${emp.id}'/>" class="btn">Delete</a>

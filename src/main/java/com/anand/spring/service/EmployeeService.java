@@ -16,4 +16,6 @@ public interface EmployeeService {
    boolean deleteEmployeeById(int id);
    
    boolean checkUsername(String userName);
+
+   byte[] getResumeById(int id);
 }

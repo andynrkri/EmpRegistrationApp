@@ -12,7 +12,7 @@
 </head>
 <body>
 <c:url var="addAction" value="/register"/>
-<form:form action="${addAction}" commandName="employee" method="post" cssClass="form-horizontal" onsubmit="return returnVal();">
+<form:form action="${addAction}" commandName="employee" method="post" enctype="multipart/form-data" cssClass="form-horizontal" onsubmit="return returnVal();">
     <form:hidden path="id" id="id"/>
     <br><br>
     <div class="form-group">
@@ -66,6 +66,13 @@
         <div class="col-sm-10">
             <form:select path="city" name="city" id="city" cssClass="form-control" items="${cityList}" cssStyle="width: 60%"/>
             <span id="cityMessage" class="errmsg"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="file" class="col-sm-2 control-label">Upload Resume </label>
+        <div class="col-sm-10">
+            <form:input type="file" path="file" name="file" id="file" cssClass="form-control" accept=".docx" cssStyle="width: 60%"/>
         </div>
     </div>
 

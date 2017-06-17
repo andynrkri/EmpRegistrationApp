@@ -55,4 +55,10 @@ public class EmployeeServiceImpl implements EmployeeService {
    public boolean checkUsername(String userName) {
       return getEmployeeDao().checkUsername(userName);
    }
+
+   @Override
+   @Transactional
+   public byte[] getResumeById(int id) {
+      return getEmployeeDao().getResumeById(id);
+   }
 }

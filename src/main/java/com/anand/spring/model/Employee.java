@@ -1,6 +1,7 @@
 package com.anand.spring.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -23,7 +24,17 @@ public class Employee {
    private Integer salary;
    //salary is being taken from a select tag and hence will never be empty
    private String city;
-   
+   @Lob
+   private byte[] file;
+
+   public byte[] getFile() {
+      return file;
+   }
+
+   public void setFile(byte[] file) {
+      this.file = file;
+   }
+
    public String getUserName() {
       return userName;
    }

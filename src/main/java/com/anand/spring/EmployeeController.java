@@ -7,12 +7,17 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -26,6 +31,13 @@ public class EmployeeController {
    private Map<String, String> cities = new LinkedHashMap<>();
    private Map<String, String> getCities() {
       return cities;
+   }
+   //TODO Study about @InitBinder
+   @InitBinder
+   protected void initBinder(HttpServletRequest request,
+                             ServletRequestDataBinder binder) throws ServletException {
+      binder.registerCustomEditor(byte[].class,
+              new ByteArrayMultipartFileEditor());
    }
    
    @Autowired()
@@ -80,6 +92,19 @@ public class EmployeeController {
          return "redirect:/home";
       }
       return "redirect:/home";
+   }
+
+   @RequestMapping("/resume/{id}")
+   @ResponseBody
+   public String getResume(@PathVariable("id") int id) throws IOException {
+      String newFilePath = "C:\\Users\\anand\\Documents\\id"+id+"Resume"+".docx";
+      byte[] bytes = getEmployeeService().getResumeById(id);
+      File someFile = new File(newFilePath);
+      FileOutputStream fos = new FileOutputStream(someFile);
+      fos.write(bytes);
+      fos.flush();
+      fos.close();
+      return "This resume is available at " + newFilePath + ".";
    }
    
    private Map<String, String> getCitiesList() {
