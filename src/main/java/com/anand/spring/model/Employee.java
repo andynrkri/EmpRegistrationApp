@@ -24,7 +24,7 @@ public class Employee {
    private Integer salary;
    //salary is being taken from a select tag and hence will never be empty
    private String city;
-   @Lob
+   @NotEmpty @Lob
    private byte[] file;
 
    public byte[] getFile() {

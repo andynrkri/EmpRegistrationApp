@@ -1,5 +1,6 @@
 package com.anand.spring;
-
+//TODO Study about @InitBinder
+//TODO study caching.
 import com.anand.spring.model.Employee;
 import com.anand.spring.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +16,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.LinkedHashMap;
@@ -32,7 +32,7 @@ public class EmployeeController {
    private Map<String, String> getCities() {
       return cities;
    }
-   //TODO Study about @InitBinder
+
    @InitBinder
    protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws ServletException {
       binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
@@ -102,7 +102,7 @@ public class EmployeeController {
       fos.write(bytes);
       fos.flush();
       fos.close();
-      return "This resume is available at " + newFilePath;
+      return "This resume is available at: " + "<b>"+newFilePath+"</b>";
    }
 
    @RequestMapping("/error")
@@ -119,5 +119,4 @@ public class EmployeeController {
       cities.put("Tokyo", "Tokyo");
       return cities;
    }
-   
 }
