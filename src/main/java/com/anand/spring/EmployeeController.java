@@ -1,5 +1,4 @@
 package com.anand.spring;
-//TODO Study about @InitBinder
 //TODO study caching.
 import com.anand.spring.model.Employee;
 import com.anand.spring.service.EmployeeService;
@@ -9,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.ServletRequestDataBinder;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
@@ -33,8 +33,9 @@ public class EmployeeController {
       return cities;
    }
 
+   //configuring web data binding with @InitBinder
    @InitBinder
-   protected void initBinder(HttpServletRequest request, ServletRequestDataBinder binder) throws ServletException {
+   protected void initBinder(WebDataBinder binder) throws ServletException {
       binder.registerCustomEditor(byte[].class, new ByteArrayMultipartFileEditor());
    }
    
