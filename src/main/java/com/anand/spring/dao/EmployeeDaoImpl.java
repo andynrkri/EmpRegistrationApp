@@ -8,7 +8,6 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Arrays;
 import java.util.List;
 
 //implementation of Dao Layer
@@ -82,7 +81,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
       }
       return employee != null;
    }
-
+   
    @Override
    public byte[] getResumeById(int id) {
       Employee employee;

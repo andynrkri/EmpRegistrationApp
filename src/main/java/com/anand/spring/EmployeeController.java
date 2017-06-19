@@ -1,5 +1,6 @@
 package com.anand.spring;
 //TODO study caching.
+
 import com.anand.spring.model.Employee;
 import com.anand.spring.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,13 +8,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.ServletRequestDataBinder;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.support.ByteArrayMultipartFileEditor;
 
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -24,15 +23,17 @@ import java.util.Map;
 @Controller
 public class EmployeeController {
    private EmployeeService employeeService;
+   
    private EmployeeService getEmployeeService() {
       return employeeService;
    }
    
    private Map<String, String> cities = new LinkedHashMap<>();
+   
    private Map<String, String> getCities() {
       return cities;
    }
-
+   
    //configuring web data binding with @InitBinder
    @InitBinder
    protected void initBinder(WebDataBinder binder) throws ServletException {
@@ -63,8 +64,8 @@ public class EmployeeController {
          getEmployeeService().updateEmployee(employee);
       }
       // forward will send the same POST data to the list. Make sure the /list implementing method doesn't interpret this.
-       // Also, in the case you want to prevent multiple POST request by client, user redirect!! I've used forward coz
-       // I read it's a tad bit faster than the redirect.
+      // Also, in the case you want to prevent multiple POST request by client, user redirect!! I've used forward coz
+      // I read it's a tad bit faster than the redirect.
       return "forward:/list";
    }
    
@@ -80,6 +81,7 @@ public class EmployeeController {
       modelMap.addAttribute("cityList", getCitiesList());
       return "input_form";
    }
+   
    // forward will send the same get request to list.
    @RequestMapping(value = "/delete/{id}")
    public String deleteEmployee(@PathVariable("id") int id) {
@@ -92,20 +94,20 @@ public class EmployeeController {
       }
       return "redirect:/home";
    }
-
+   
    @RequestMapping("/resume/{id}")
    @ResponseBody
    public String getResume(@PathVariable("id") int id) throws IOException {
-      String newFilePath = "C:\\Users\\anand\\Documents\\id"+id+"Resume"+".docx";
+      String newFilePath = "/home/necuser/id" + id + "Resume" + ".docx";
       byte[] bytes = getEmployeeService().getResumeById(id);
       File someFile = new File(newFilePath);
       FileOutputStream fos = new FileOutputStream(someFile);
       fos.write(bytes);
       fos.flush();
       fos.close();
-      return "This resume is available at: " + "<b>"+newFilePath+"</b>";
+      return "This resume is available at: " + "<b>" + newFilePath + "</b>";
    }
-
+   
    @RequestMapping("/error")
    public String errorPage() {
       return "error_page";

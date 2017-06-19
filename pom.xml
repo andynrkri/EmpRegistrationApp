@@ -41,6 +41,13 @@
             <artifactId>spring-tx</artifactId>
             <version>${org.springframework-version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${org.springframework-version}</version>
+        </dependency>
+        <!--JDBC driver-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -151,10 +158,11 @@
 
         <!--Validation It is common to validate a model after binding user input to it. Spring 3 provides support for declarative validation with JSR-303. This support is enabled automatically if a JSR-303 provider, such as Hibernate Validator, is present on your classpath. When enabled, you can trigger validation simply by annotating a Controller method parameter with the @Valid annotation: After binding incoming POST parameters, the AppointmentForm will be validated; in this case, to verify the date field value is not null and occurs in the future.-->
         <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-validator -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.4.1.Final</version>
+            <version>4.3.1.Final</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->

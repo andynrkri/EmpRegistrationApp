@@ -11,7 +11,7 @@
     <!--this is to make sure that the external resources like js and css loads; removing this will cause them not to load since dispatcher servlet is mapped at "/"-->
     <mvc:resources mapping="/resources/**" location="/resources/" cache-period="0"/>
 
-    <context:component-scan	base-package="com.anand"/>
+    <context:component-scan base-package="com.anand.spring"/>
 
     <bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method="close">
         <property name="driverClassName" value="org.postgresql.Driver"/>
@@ -45,8 +45,8 @@
     </bean>
 
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/views/" />
-        <property name="suffix" value=".jsp" />
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
     </bean>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

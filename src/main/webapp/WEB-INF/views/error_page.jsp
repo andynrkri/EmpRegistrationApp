@@ -13,7 +13,8 @@
 </head>
 <body>
 <div class="alert alert-danger">
-    <strong>Error!</strong> Oops, There seems to be an error that just occurred. <a href="${pageContext.request.contextPath}/home" style="color: #4CAF50">Go to home page</a>
+    <strong>Error!</strong> Oops, There seems to be an error that just occurred. <a
+        href="${pageContext.request.contextPath}/home" style="color: #4CAF50">Go to home page</a>
 </div>
 </body>
 </html>
