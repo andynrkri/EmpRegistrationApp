@@ -11,6 +11,8 @@
     <!--this is to make sure that the external resources like js and css loads; removing this will cause them not to load since dispatcher servlet is mapped at "/"-->
     <mvc:resources mapping="/resources/**" location="/resources/" cache-period="0"/>
 
+    <mvc:resources mapping="/favicon.ico" location="favicon.ico" />
+
     <context:component-scan base-package="com.anand.spring"/>
 
     <bean class="org.apache.commons.dbcp.BasicDataSource" id="dataSource" destroy-method="close">
